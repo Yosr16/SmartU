@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Transport Post</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+         .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+            overflow: auto;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .success-message {
+            background-color: #28a745;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Styles pour le reste de la page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #333333;
+        }
+
+        .add-transport-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .add-transport-btn i {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .add-transport-form {
+            display: none;
+        }
+
+        .add-transport-form.active {
+            display: block;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        form input, form select, form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .post-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-gap: 20px;
+        }
+
+        .post {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .post:hover {
+            transform: translateY(-5px);
+        }
+
+        .post h3 {
+            color: #333333;
+            margin-bottom: 10px;
+        }
+
+        .post p {
+            color: #666666;
+            margin-bottom: 10px;
+        }
+
+        .post-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .reserve-button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .reserve-button:hover {
+            background-color: #0056b3;
+        }
+
+        .success-message {
+            background-color: #28a745;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .pagination button {
+            padding: 8px 12px;
+            margin: 0 5px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .pagination button:hover {
+            background-color: #0056b3;
+        }
+        .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.nav-items {
+    display: flex;
+}
+
+.nav-item {
+    margin-right: 1rem;
+}
+
+.nav-item a {
+    color: #000;
+    text-decoration: none;
+    font-size: 1.5rem;
+    transition: color 0.3s ease;
+}
+
+.nav-item a:hover {
+    color: #007bff;
+}
+
+.fa {
+    font-size: 2rem;
+}
+
+    </style>
+    <script>
+        function toggleDarkMode() {
+          var body = document.body;
+          var navbar = document.querySelector('.navbar');
+          var post = document.querySelector('.post');
+          
+          body.classList.toggle('dark-mode'); 
+          navbar.classList.toggle('dark-mode'); 
+          post.classList.toggle('dark-mode'); 
+      }
+      </script>
+</head>
+<body>
+    <header class="navbar" id="post">
+        <div class="navbar-brand">SmartU</div>
+        <div class="nav-items">
+            <div class="nav-item">
+                <a href="{% url 'index' %}">
+                    <i class="fa fa-home fa-lg"></i>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="{% url 'upload_transport_post' %}">
+                    <i class="fa fa-car fa-lg"></i>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="{% url 'upload_logement_post' %}">
+                    <i class="fa fa-bed fa-lg"></i>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="{% url 'upload_stage_post' %}">
+                    <i class="fa fa-briefcase fa-lg"></i>
+                </a>
+            </div>
+            <a href="{% url 'create-post' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M12 2c.55 0 1 .45 1 1v8h8c.55 0 1 .45 1 1s-.45 1-1 1h-8v8c0 .55-.45 1-1 1s-1-.45-1-1v-8H3c-.55 0-1-.45-1-1s.45-1 1-1h8V3c0-.55.45-1 1-1z"/>
+                </svg>
+            </a>
+        </div>
+    </header>
+    <div class="container">
+        <h1>Transport Posts</h1>
+        <div>
+            <label for="searchInput">Rechercher :</label>
+            <input type="text" id="searchInput" oninput="searchTransports()" placeholder="Entrez un mot-clé...">
+        </div>
+        <!-- Filtrer par type de moyen de transport -->
+        <div>
+            <label for="transportType">Filtrer par moyen de transport:</label>
+            <select id="transportType" onchange="filterTransports()">
+                <option value="tous">Tous les transports</option>
+                <option value="Voiture">Voiture</option>
+                <option value="Train">Train</option>
+                <option value="Avion">Avion</option>
+                <option value="Bateau">Bateau</option>
+                <option value="Autre">Autre</option>
+            </select>
+        </div>
+        <!-- Afficher les transports existants -->
+        <div class="post-container">
+            {% for transport in transports %}
+    <div class="post" id="post_{{ transport.id }}">
+        <p>Posté par: {{ transport.utilisateur.user.username }}</p>
+        <h3>{{ transport.destination }}</h3>
+        <p>Moyen de transport: {{ transport.moyen_transport }}</p>
+        <p>{{ transport.description }}</p>
+        <p>Date de disponibilité: {{ transport.disponibilite }}</p>
+        <p>Nombre de places disponibles: <span id="nbr_places_disponibles_{{ transport.id }}">{{ transport.nbr_places_disponibles }}</span></p>
+ 
+        {% if transport.nbr_places_disponibles == 0 %}
+        <p style="color: red;">Non disponible</p>
+    {% else %}
+        {% if transport.est_reserve %}
+            <p style="color: red;">Non disponible</p>
+        {% else %}
+        {% if not transport.est_reserve %}
+                        <div class="post-actions">
+                            <button class="reserve-button" onclick="reserveTransport('{{ transport.id }}')">Réserver</button>
+                        </div>
+        {% endif %}
+        
+        {% endif %}
+    {% endif %}
+    
+        <span id="reservation_count_{{ transport.id }}">{{ transport.nbr_reservations }}</span>
+    </div>
+{% endfor %}
+
+        </div>
+        
+        <!-- Message de succès -->
+        <div id="successMessage" class="success-message" style="display: none;">Réservé avec succès!</div>
+
+        
+    </div>
+
+        <div id="successMessage" class="success-message" style="display: none;">Réservé avec succès!</div>
+    
+    <div class="pagination">
+        <button onclick="previousPage()">Précédent</button>
+        <span id="currentPage">1</span>
+        <button onclick="nextPage()">Suivant</button>
+    </div>
+
+    
+<script>
+    document.getElementById('reservationButton').addEventListener('click', function() {
+        var transportId = 1; // Remplacez par l'ID du transport approprié
+        
+        // Effectuer une requête AJAX pour réserver le transport
+        fetch('/reserve_transport/' + transportId + '/')
+            .then(response => response.json())
+            .then(data => {
+                // Vérifier si la réservation a été effectuée avec succès
+                if (data.success) {
+                    // Afficher une alerte de succès
+                    alert(data.message);
+                } else {
+                    // Afficher une alerte d'erreur si la réservation a échoué
+                    alert('Erreur lors de la réservation : ' + data.error);
+                }
+            })
+            .catch(error => {
+                // Gérer les erreurs de requête
+                console.error('Erreur lors de la requête :', error);
+            });
+    });
+    </script>
+    <script>
+    function reserveTransport(transportId) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/reserve_transport/" + transportId + "/");
+    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            var successMessage = document.getElementById("successMessage");
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response && response.nbr_places_disponibles !== undefined) {
+                    // Mettre à jour le nombre de places disponibles
+                    var countElement = document.getElementById("nbr_places_disponibles_" + transportId);
+                    if (countElement) {
+                        countElement.textContent = response.nbr_places_disponibles;
+                    }
+                    // Afficher le message de succès
+                    successMessage.style.display = "block";
+                    successMessage.innerText = "Réservé avec succès!";
+                } else {
+                    // Afficher un message d'erreur générique
+                    successMessage.style.display = "block";
+                    successMessage.style.backgroundColor = "#dc3545";
+                    successMessage.innerText = "Échec de la réservation";
+                }
+            } else {
+                // Afficher le message d'erreur reçu du serveur
+                var errorResponse = JSON.parse(xhr.responseText);
+                successMessage.style.display = "block";
+                successMessage.style.backgroundColor = "#dc3545";
+                successMessage.innerText = errorResponse.error || "Échec de la réservation";
+            }
+            // Masquer le message après quelques secondes
+            setTimeout(function() {
+                successMessage.style.display = "none";
+                successMessage.style.backgroundColor = "#28a745"; // Réinitialiser la couleur de fond
+            }, 3000);
+        }
+    };
+    xhr.send();
+}
+
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+    </script>
+
+    <script>
+        var postsPerPage = 6; // Nombre de posts par page
+        var currentPage = 1; // Page actuelle
+
+        
+
+        // Fonction pour afficher les posts de la page actuelle
+        function displayCurrentPage(pageNumber) {
+            var startIndex = (pageNumber - 1) * postsPerPage;
+            var endIndex = startIndex + postsPerPage;
+            var posts = document.querySelectorAll(".post");
+
+            posts.forEach(function(post, index) {
+                if (index >= startIndex && index < endIndex) {
+                    post.style.display = "block";
+                } else {
+                    post.style.display = "none";
+                }
+            });
+        }
+
+        // Fonction pour passer à la page précédente
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                document.getElementById("currentPage").innerText = currentPage;
+                displayCurrentPage(currentPage);
+            }
+        }
+        function searchTransports() {
+    var searchInput = document.getElementById("searchInput").value.toLowerCase();
+    var transports = document.querySelectorAll(".post");
+
+    transports.forEach(function(transport) {
+        var transportDestination = transport.querySelector("h3").innerText.toLowerCase();
+        var transportDescription = transport.querySelector("p:nth-child(4)").innerText.toLowerCase();
+
+        if (transportDestination.includes(searchInput) || transportDescription.includes(searchInput)) {
+            transport.style.display = "block";
+        } else {
+            transport.style.display = "none";
+        }
+    });
+}
+        // Fonction pour passer à la page suivante
+        function nextPage() {
+            var totalPosts = document.querySelectorAll(".post").length;
+            var totalPages = Math.ceil(totalPosts / postsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                document.getElementById("currentPage").innerText = currentPage;
+                displayCurrentPage(currentPage);
+            }
+        }
+
+        // Afficher la première page au chargement de la page
+        displayCurrentPage(currentPage);
+
+    // Fonction pour afficher la fenêtre modale de réservation
+    function showReservationModal(transportId) {
+            var modal = document.getElementById("reservationModal");
+            modal.style.display = "block";
+            // Stocker l'ID du transport dans un attribut data
+            modal.setAttribute("data-transport-id", transportId);
+        }
+
+        // Fonction JavaScript pour confirmer la réservation
+        function confirmReservation() {
+            var transportId = document.getElementById("reservationModal").getAttribute("data-transport-id");
+            var date = document.getElementById("reservationDate").value;
+            var time = document.getElementById("reservationTime").value;
+
+            // Obtenir la date actuelle
+            var today = new Date().toISOString().slice(0, 10);
+
+            // Définir la date actuelle comame valeur minimale pour la date de réservation
+            document.getElementById("reservationDate").min = today;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/reserve_transport/" + transportId + "/");
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response && response.message) {
+                            // Afficher le message de succès dans la modal
+                            var successMessage = document.getElementById("successMessage");
+                            successMessage.style.display = "block";
+                            successMessage.innerHTML = response.message;
+                            // Fermer la modal après quelques secondes
+                            setTimeout(function() {
+                                var modal = document.getElementById("reservationModal");
+                                modal.style.display = "none";
+                                successMessage.style.display = "none";
+                            }, 3000); // Fermer la modal après 3 secondes (3000 millisecondes)
+                        } else {
+                            console.error('Échec de la réservation:', response.error);
+                        }
+                    }
+                }
+            };
+            var data = JSON.stringify({ date: date, time: time });
+            xhr.send(data);
+        }
+
+        // Fonction JavaScript pour fermer la fenêtre modale de réservation
+        function closeModal() {
+            var modal = document.getElementById("reservationModal");
+            modal.style.display = "none";
+        }
+
+        // Fonction JavaScript existante pour obtenir le cookie CSRF
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Trouver le cookie correspondant au nom spécifié
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        // Fonction pour filtrer les transports en fonction du moyen de transport sélectionné
+        function filterTransports() {
+            var selectedTransport = document.getElementById("transportType").value;
+            var transports = document.querySelectorAll(".post");
+
+            // Afficher tous les transports si l'option "Tous les transports" est sélectionnée
+            if (selectedTransport === "tous") {
+                transports.forEach(function(transport) {
+                    transport.style.display = "block";
+                });
+                return;
+            }
+
+            // Filtrer les transports en fonction du moyen de transport sélectionné
+            transports.forEach(function(transport) {
+                var transportType = transport.querySelector("p:nth-child(3)").innerText.split(": ")[1];
+                if (transportType === selectedTransport) {
+                    transport.style.display = "block";
+                } else {
+                    transport.style.display = "none";
+                }
+            });
+        }
+
+        // Fonction pour réserver un transport
+        function toggleReservation(icon, transportId) {
+            icon.classList.toggle('active');
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/reserve_transport/" + transportId + "/");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Parse JSON response
+                    var response = JSON.parse(xhr.responseText);
+                    // Mettre à jour le nombre de réservations sur la page
+                    var countElement = document.getElementById("reservation_count_" + transportId);
+                    countElement.textContent = response.nb_reservations;
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</body>
+</html>

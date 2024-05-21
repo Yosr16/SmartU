@@ -1,0 +1,15 @@
+<div class="bg-white shadow-md rounded-md overflow-hidden mt-4">
+    <div class="bg-gray-50 border-b border-gray-100 flex items-baseline justify-between py-4 px-6">
+        <h2 class="font-semibold text-lg" style="color: black;">Random Post</h2>
+    </div>
+    <div class="px-6 py-4" id="randomContent">
+        <!-- Afficher les détails du post aléatoire -->
+        {% if random_post %}
+            <h3>{{ random_post.titre }}</h3>
+            <p>{{ random_post.description }}</p>
+            <!-- Ajoutez d'autres détails selon vos besoins -->
+        {% else %}
+            <p>Aucun post disponible pour le moment.</p>
+        {% endif %}
+    </div>
+</div>

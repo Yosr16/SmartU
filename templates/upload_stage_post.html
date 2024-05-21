@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stages</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .event {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .event h2 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .event p {
+            margin: 0;
+            color: #666;
+        }
+        .interested-icon {
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .interested-text {
+            font-size: 14px;
+        }
+        .interested-icon.active {
+            color: #FFD700; /* couleur de l'étoile lorsque l'interaction est active */
+        }
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .pagination button {
+            padding: 8px 12px;
+            margin: 0 5px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .pagination button:hover {
+            background-color: #0056b3;
+        }
+        #searchInput {
+    width: calc(50% - 25px);    padding: 8px; /* Ajoute un remplissage pour améliorer l'apparence */
+    border: 1px solid #ccc; /* Ajoute une bordure */
+    border-radius: 5px; /* Ajoute une bordure arrondie */
+}
+
+.search-filter-container {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 10px;
+}
+
+.search-container,
+.stage-filter {
+    flex: 1; /* Les deux éléments occupent la même largeur */
+    margin-right: 10px; /* Espacement entre les deux éléments */
+}
+
+
+#searchBtn {
+    position: absolute; /* Positionnement absolu pour placer le bouton */
+    top: 0;
+    right: 0;
+    background-color: #007bff; /* Couleur de fond du bouton */
+    color: #fff; /* Couleur du texte du bouton */
+    border: none;
+    padding: 8px 15px; /* Ajoute du remplissage au bouton */
+    border-radius: 0 5px 5px 0; /* Bords arrondis pour le coin droit du bouton */
+    cursor: pointer;
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.dark-mode .navbar {
+    background-color: #1f1f1f;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+.navbar-brand {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333333;
+}
+
+.dark-mode .navbar-brand {
+    color: #e0e0e0;
+}
+
+.menu-icon {
+    display: none;
+}
+
+.header-menu {
+    display: flex;
+    align-items: center;
+}
+
+.header-menu.active {
+    display: block;
+}
+
+.nav-items {
+    display: flex;
+}
+
+.nav-item {
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.nav-item a {
+    color: #000;
+    text-decoration: none;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.nav-item a span {
+    margin-left: 0.5rem;
+    display: none;
+}
+
+.nav-item a:hover {
+    color: #007bff;
+}
+
+.nav-item:hover a span {
+    display: inline;
+}
+
+.nav-item a .fa {
+    font-size: 2.5rem; /* Modifier la taille des icônes de la barre de navigation */
+}
+
+.dark-mode .nav-item a .fa {
+    color: #e0e0e0;
+}
+
+.dark-mode-toggle {
+    margin-left: 1rem;
+}
+
+/* Styles pour les petits écrans */
+@media screen and (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    .menu-icon {
+        display: block;
+        cursor: pointer;
+    }
+
+    .header-menu {
+        display: none;
+    }
+
+    .header-menu.active {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #fff;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+    }
+
+    .header-menu.active .nav-items {
+        flex-direction: column;
+    }
+
+    .header-menu.active .nav-item {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+
+    .header-menu.active .nav-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .header-menu.active .dark-mode-toggle {
+        margin-left: 0;
+        margin-top: 1rem;
+    }
+}
+    </style>
+    <script>
+        function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+    }
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuTabs = document.querySelectorAll('.header-menu-tab');
+            menuTabs.forEach(tab => {
+                tab.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const targetId = this.getAttribute('data-target');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        document.querySelectorAll('.block').forEach(block => {
+                            if (block.id !== targetId) {
+                                block.classList.add('hidden');
+                            }
+                        });
+                        targetElement.classList.remove('hidden');
+                    }
+                });
+            });
+            const menuIcon = document.querySelector('.menu-icon');
+            const headerMenu = document.querySelector('.header-menu');
+            menuIcon.addEventListener('click', function() {
+                headerMenu.classList.toggle('active');
+            });
+        });
+        </script>
+</head>
+<body>
+    <header class="navbar">
+        <div class="navbar-brand">SmartU</div>
+        <div class="menu-icon">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div class="header-menu">
+            <div class="nav-items">
+                <div class="nav-item">
+                    <a href="{% url 'index' %}">
+                        <i class="fa fa-home fa-lg"></i>
+                        <span>Home</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="{% url 'upload_transport_post' %}">
+                        <i class="fa fa-car fa-lg"></i>
+                        <span>Transport</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="{% url 'upload_logement_post' %}">
+                        <i class="fa fa-bed fa-lg"></i>
+                        <span>Logement</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="{% url 'upload_stage_post' %}">
+                        <i class="fa fa-briefcase fa-lg"></i>
+                        <span>Stage</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="{% url 'create-post' %}">
+                        <i class="fa fa-plus-circle fa-lg"></i>
+                        <span>Create Post</span>
+                    </a>
+                </div>
+            </div>
+            <button onclick="toggleDarkMode()">
+                <i class="fa fa-moon"></i>
+            </button>
+        </div>
+    </div>
+</header>
+   
+    <div class="container">
+        <h1>Stages à la une pour vous</h1>
+        <div class="search-filter-container">
+            <div class="search-container">
+            </div>
+        <input type="text" id="searchInput" oninput="searchStages()" placeholder="Rechercher par sujet...">
+
+        <div class="stage-filter">
+            <label for="stageType">Filtrer par type de stage :</label>
+            <select id="stageType" onchange="filterStages()">
+                <option value="tous">Tous</option>
+                <option value="ouvrier">Ouvrier</option>
+                <option value="technicien">Technicien</option>
+                <option value="PFE">PFE</option>
+            </select>
+        </div>
+    </div>
+        <!-- Boucle pour afficher les stages -->
+        {% for stage in stages %}
+        <div class="event">
+            <h2>{{ stage.sujet }}</h2>
+            <h2>{{ stage.type }}</h2>
+            <p>{{ stage.description }}</p>
+            <span class="interested-icon" onclick="toggleInterest(this, '{{ stage.id }}')">
+                <i class="far fa-star"></i>
+            </span>
+            <span class="interested-text">Intéressé(e)</span>
+            <span id="interest_count_{{ stage.id }}">{{ stage.nombre_interets }}</span>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="pagination">
+        <button onclick="previousPage()">Précédent</button>
+        <span id="currentPage">1</span>
+        <button onclick="nextPage()">Suivant</button>
+    </div>
+</body>
+<script>
+    function searchStages() {
+    var searchInput = document.getElementById("searchInput").value.toLowerCase();
+    var stages = document.querySelectorAll(".event");
+
+    stages.forEach(function(stage) {
+        var stageSujet = stage.querySelector("h2:nth-child(1)").innerText.toLowerCase();
+        if (stageSujet.includes(searchInput)) {
+            stage.style.display = "block";
+        } else {
+            stage.style.display = "none";
+        }
+    });
+}
+
+    // Fonction pour filtrer les stages en fonction du type sélectionné
+    function filterStages() {
+        var selectedType = document.getElementById("stageType").value;
+        var stages = document.querySelectorAll(".event");
+
+        // Afficher tous les stages si l'option "Tous" est sélectionnée
+        if (selectedType === "tous") {
+            stages.forEach(function(stage) {
+                stage.style.display = "block";
+            });
+            return;
+        }
+
+        // Sinon, masquer les stages qui ne correspondent pas au type sélectionné
+        stages.forEach(function(stage) {
+            var stageType = stage.querySelector("h2:nth-child(2)").innerText.toLowerCase();
+            if (stageType === selectedType) {
+                stage.style.display = "block";
+            } else {
+                stage.style.display = "none";
+            }
+        });
+    }
+
+    var stagesPerPage = 4;
+
+    // Fonction pour afficher les stages de la page actuelle
+    function displayCurrentPage(pageNumber) {
+        var startIndex = (pageNumber - 1) * stagesPerPage;
+        var endIndex = startIndex + stagesPerPage;
+        var stages = document.querySelectorAll(".event");
+
+        stages.forEach(function(stage, index) {
+            if (index >= startIndex && index < endIndex) {
+                stage.style.display = "block";
+            } else {
+                stage.style.display = "none";
+            }
+        });
+    }
+
+    // Fonction pour passer à la page précédente
+    function previousPage() {
+        var currentPage = parseInt(document.getElementById("currentPage").innerText);
+        if (currentPage > 1) {
+            document.getElementById("currentPage").innerText = currentPage - 1;
+            displayCurrentPage(currentPage - 1);
+        }
+    }
+
+    // Fonction pour passer à la page suivante
+    function nextPage() {
+        var currentPage = parseInt(document.getElementById("currentPage").innerText);
+        var totalStages = document.querySelectorAll(".event").length;
+        var totalPages = Math.ceil(totalStages / stagesPerPage);
+        if (currentPage < totalPages) {
+            document.getElementById("currentPage").innerText = currentPage + 1;
+            displayCurrentPage(currentPage + 1);
+        }
+    }
+
+    // Affichez la première page au chargement de la page
+    displayCurrentPage(1);
+
+    // Fonction pour activer ou désactiver l'intérêt pour un stage
+    function toggleInterest(icon, stageId) {
+        icon.classList.toggle('active');
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/toggle_interest_stage/" + stageId + "/");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Parse JSON response
+                var response = JSON.parse(xhr.responseText);
+                // Update interested count on the page
+                var countElement = document.getElementById("interest_count_" + stageId);
+                countElement.textContent = response.nb_interesses;
+            }
+        };
+        xhr.send();
+    }
+</script>
+</html>

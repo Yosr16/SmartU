@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de la marque</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .header {
+            background-color: #343a40;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+        .brand {
+            margin: 0 auto;
+            width: 100px;
+            height: 100px;
+            overflow: hidden;
+        }
+        .brand img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: calc(33.33% - 40px);
+            max-width: 300px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card img {
+            width: 100%;
+            height: 300px; /* Réglez la hauteur souhaitée */
+            object-fit: cover;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .card-content {
+            padding: 20px;
+        }
+        .card-content h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+        .card-content p {
+            margin-bottom: 15px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .card-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 20px;
+            border-top: 1px solid #eee;
+            background-color: #f8f9fa;
+        }
+        .card-actions button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            color: #666;
+            transition: color 0.3s ease;
+            font-size: 14px; /* Réglez la taille de la police pour les boutons */
+        }
+        .card-actions button i {
+            margin-right: 5px;
+            font-size: 18px; /* Réglez la taille de la police pour les icônes */
+        }
+        .card-actions button:hover {
+            color: #007bff;
+        }
+        /* Style pour rendre l'icône du cœur rouge */
+        .card-actions button i.liked {
+            color: #dc3545;
+        }
+        .comment-form {
+            display: none;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .comment-form textarea {
+            width: calc(100% - 20px);
+            margin-bottom: 10px;
+            resize: vertical;
+        }
+        .comments {
+            width: 100%;
+            padding: 10px 20px;
+            box-sizing: border-box;
+            border-bottom: 1px solid #eee;
+        }
+        .comments p {
+            margin: 5px 0;
+        }
+        .empty-message {
+            text-align: center;
+            width: 100%;
+        }
+        @media screen and (max-width: 768px) {
+            .container {
+                justify-content: center;
+            }
+            .card {
+                width: calc(50% - 40px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="brand">
+            <img class="main-image" src="{{ business.image.url }}" alt="{{ business.name }}">
+        </div>
+        <h1>{{ business.name }}</h1>
+
+        <p>{{ business.description }}</p>
+    </div>
+    
+    <div class="container">
+        {% for post in posts %}
+        <!-- HTML -->
+        <div class="card">
+    <img src="{{ post.image.url }}" alt="{{ post.title }}">
+    <div class="card-content">
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.content }}</p>
+    </div>
+    <div class="card-actions">
+        <button class="like-btn" data-post-id="{{ post.id }}">
+            <i class="fas fa-heart"></i> J'aime <span class="like-count">{{ post.likes }}</span>
+        </button>
+        <button class="comment-btn" data-post-id="{{ post.id }}">
+            <i class="fas fa-comment"></i> Commentaire
+        </button>
+        <!-- Formulaire de commentaire -->
+        <form class="comment-form" action="{% url 'add_comment' %}" method="POST" style="display: none;">
+            {% csrf_token %}
+            <input type="hidden" name="post_id" value="{{ post.id }}">
+            <textarea name="content" placeholder="Ajouter un commentaire"></textarea>
+            <button type="submit">Envoyer</button>
+        </form>
+        <!-- Afficher les commentaires -->
+        <div class="comments">
+            {% for comment in post.comments.all %}
+                <p>{{ comment.content }}</p>
+            {% empty %}
+                <p>Aucun commentaire pour le moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+        {% empty %}
+        <p class="empty-message">Aucune autre publication pour le moment.</p>
+        {% endfor %}
+    </div>
+</body>
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+    // Ajouter un événement de clic au bouton "J'aime"
+    document.querySelectorAll('.like-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const postId = this.getAttribute('data-post-id');
+            const likeCountSpan = this.querySelector('.like-count');
+
+            // Envoyer une requête AJAX au serveur pour enregistrer le "like" pour la publication
+            fetch('{% url "like_postss" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: 'post_id=' + postId + '&csrfmiddlewaretoken=' + getCookie('csrftoken')
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Mettre à jour le nombre de "J'aime" affiché sur la page
+                likeCountSpan.textContent = data.likes;
+                // Désactiver le bouton "J'aime" après avoir cliqué dessus
+                btn.disabled = true;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+
+    // Ajouter un événement de clic au bouton "Commentaire"
+    document.querySelectorAll('.comment-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const commentForm = this.parentElement.querySelector('.comment-form');
+            commentForm.style.display = 'block';
+        });
+    });
+
+    // Fonction pour récupérer le token CSRF
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+</script>
+    
+    
+</html>

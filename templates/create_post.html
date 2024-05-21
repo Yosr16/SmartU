@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .user-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .user-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+        .user-info p {
+            margin: 0;
+            font-weight: bold;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .form-group input[type="text"],
+        .form-group textarea,
+        .form-group select {
+            width: calc(100% - 12px); /* Ajustement pour compenser le padding */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .form-group button {
+            padding: 10px 20px;
+            background-color: #007bff; /* Changement de la couleur en bleu */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .form-group button:hover {
+            background-color: #0056b3; /* Changement de la couleur en bleu plus foncé au survol */
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.nav-items {
+    display: flex;
+}
+
+.nav-item {
+    margin-right: 1rem;
+}
+
+.nav-item a {
+    color: #000;
+    text-decoration: none;
+    font-size: 1.5rem;
+    transition: color 0.3s ease;
+}
+
+.nav-item a:hover {
+    color: #007bff;
+}
+
+.fa {
+    font-size: 2rem;
+}
+
+    </style>
+   <script>
+    function toggleDarkMode() {
+      var body = document.body;
+      var navbar = document.querySelector('.navbar');
+      var post = document.querySelector('.post');
+      
+      body.classList.toggle('dark-mode'); // Bascule la classe dark-mode pour le body
+      navbar.classList.toggle('dark-mode'); // Bascule la classe dark-mode pour la navbar
+      post.classList.toggle('dark-mode'); // Bascule la classe dark-mode pour le post
+  }
+  </script>
+  
+  </head>
+  <body >
+    <header class="navbar" id="post">
+        <div class="navbar-brand">SmartU</div>
+        <div class="nav-items">
+            <div class="nav-item">
+                <a href="{% url 'index' %}">
+                    <i class="fa fa-home fa-lg"></i>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="{% url 'upload_transport_post' %}">
+                    <i class="fa fa-car fa-lg"></i>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="{% url 'upload_logement_post' %}">
+                    <i class="fa fa-bed fa-lg"></i>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="{% url 'upload_stage_post' %}">
+                    <i class="fa fa-briefcase fa-lg"></i>
+                </a>
+            </div>
+            <a href="{% url 'create-post' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M12 2c.55 0 1 .45 1 1v8h8c.55 0 1 .45 1 1s-.45 1-1 1h-8v8c0 .55-.45 1-1 1s-1-.45-1-1v-8H3c-.55 0-1-.45-1-1s.45-1 1-1h8V3c0-.55.45-1 1-1z"/>
+                </svg>
+            </a>
+        </div>
+    </header>
+    <div class="container">
+        <h1>Create Post</h1>
+        <div class="user-info">
+            <img src="{{ user_profile.profileimg.url }}" alt="User Image">
+            <p>Profile - {{user_profile.user.username}}</p>
+        </div>
+        <label for="post_type">Post Type:</label>
+        <select id="post_type" name="post_type" onchange="showForm()" required>
+            <option value="choisir un type">choisir un type</option>
+
+            <option value="Stage">Stage</option>
+            <option value="Transport">Transport</option>
+            <option value="Logement">Logement</option>
+            <option value="Evenement">Evenement</option>
+
+            <!-- Ajoutez d'autres options au besoin -->
+        </select>
+        
+                
+        <form id="post_stage_form" method="post">
+            {% csrf_token %}
+            <input type="hidden"name="post_type" value="Stage"/> 
+                
+
+            
+            <div id="stage_form" style="display: none;">
+                <div class="form-group">
+                    <label for="type">Type:</label>
+                    <select id="type" name="type" required>
+                        <option value="">Choisir un type</option>
+                        <option value="ouvrier">ouvrier</option>
+                        <option value="technicien">technicien</option>
+                        <option value="PFE">PFE</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sujet">Sujet:</label>
+                    <input type="text" id="sujet" name="sujet" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" rows="6" required></textarea>
+                </div>
+                
+                <button type="submit" id="stage_btn"style="padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px; ">Submit</button>
+
+            </div>
+        </form>
+            <!-- Formulaire pour créer un nouveau poste de transport -->
+            <form id="post_transport_form" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="post_type" value="Transport"/> 
+                <div id="transport_form" style="display: none;">
+                    <div class="form-group">
+                        <label for="destination">Destination:</label>
+                        <input type="text" id="destination" name="destination" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="disponibilite">Date de disponibilité :</label>
+                        <input type="date" id="disponibilite" name="disponibilite" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="heure_disponibilite">Heure de disponibilité :</label>
+                        <input type="time" id="heure_disponibilite" name="heure_disponibilite" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nbr_places_disponibles">Nombre de places disponibles :</label>
+                        <input type="number" id="nbr_places_disponibles" name="nbr_places_disponibles" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="moyen_transport">Moyen de transport</label>
+                        <select id="moyen_transport" name="moyen_transport" required>
+                            <option value="Avion">Avion</option>
+                            <option value="Train">Train</option>
+                            <option value="Voiture">Voiture</option>
+                            <option value="Bus">Bus</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea id="description" name="description" rows="6" required></textarea>
+                    </div>
+                    <button type="submit" id="transport_btn" style="padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px;">Submit</button>
+                </div>
+            </form>
+
+        </form>
+        <form id="post_evenement_form" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="post_type" value="Evenement"/> 
+        
+            <div id="evenement_form" style="display: none;">
+                <div class="form-group">
+                    <label for="type">Type:</label>
+                    <select id="type" name="type" required>
+                        <option value="">Choisir un type</option>
+                        <option value="culturel">culturel</option>
+                        <option value="scientifique">scientifique</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="titre">Titre:</label>
+                    <input type="text" id="titre" name="titre" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" rows="6" required></textarea>
+                </div>
+                <button type="submit" id="evenement_btn" style="padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px;">Submit</button>
+            </div>
+        </form>
+      
+        <form id="post_logement_form" method="post">
+            {% csrf_token %}
+           <input type="hidden"name="post_type" value="Logement"/> 
+
+            <div id="logement_form" style="display: none;">
+                
+                <div class="form-group">
+                    <label for="adresse">Adresse:</label>
+                    <input type="text" id="adresse" name="adresse" required>
+                </div>
+                <div class="form-group">
+                    <label for="prix">Prix:</label>
+                    <input type="text" id="prix" name="prix" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="logement_description" name="description" rows="6" required></textarea>
+                </div>
+                <button type="submit" id="btn_log"style="padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px;">Submit</button>
+
+            </div>
+        </form>
+    </div>
+
+    <script>
+      function showForm() {
+            var postType = document.getElementById('post_type').value;
+
+            // Masquer tous les formulaires
+            document.getElementById('stage_form').style.display = 'none';
+            document.getElementById('transport_form').style.display = 'none';
+            document.getElementById('logement_form').style.display = 'none';
+            document.getElementById('evenement_form').style.display = 'none';
+
+
+
+            // Afficher le formulaire correspondant au type de post sélectionné
+            if (postType === 'Stage') {
+                document.getElementById('stage_form').style.display = 'block';
+            } else if (postType === 'Transport') {
+                document.getElementById('transport_form').style.display = 'block';
+            } else if (postType === 'Logement') {
+                document.getElementById('logement_form').style.display = 'block';
+            }
+            else if (postType === 'Evenement') {
+                document.getElementById('evenement_form').style.display = 'block';
+            }
+
+            // Afficher le bouton de soumission
+            //document.querySelector('button[type="submit"]').style.display = 'block';
+        }  </script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'assets/images/favicon.png' %}" rel="icon" type="image/png">
+    <title>Log in to SmartU</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Intégration de Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Ajout de Google Fonts pour une typographie améliorée -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Style personnalisé -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #07a0ffde 0%, #100255cb 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 800px;
+            background-color: #ffffff3d;
+            border-radius: 0.5rem;
+            box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.347);
+            overflow: hidden;
+            display: flex;
+            flex-direction: row;
+            margin: 20px;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 40px;
+            flex: 1;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            width: 40px;
+            margin-right: 10px;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #000000;
+        }
+
+        .form-outline {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            border: 1px solid #d1d1d1cb;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 100%;
+            transition: border-color 0.3s ease-in-out;
+            background-color: #f9f9f9;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #1877f2;
+        }
+
+        .btn-login {
+            background-color: #0d0258d5;
+            color: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 100%;
+            transition: background-color 0.3s ease-in-out;
+            border: none;
+        }
+
+        .btn-login:hover {
+            background-color: #020452;
+        }
+
+        .forgot-password,
+        .signup-link {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #ffffff;
+        }
+
+        .signup-link a {
+            color: #000754;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="w-1/2 hidden lg:block">
+            <img src="https://th.bing.com/th/id/OIP.h_iRep6NrxnrOqCqmnT67wHaHa?w=2000&h=2000&rs=1&pid=ImgDetMain" alt="Trendy Pants and Shoes">
+        </div>
+        <div class="card-body">
+            <div class="logo mb-8">
+                <h1>SmartU</h1>
+            </div>
+            <form action="{% url 'signin' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-outline mb-4">
+                    <input type="text" name="username" id="username" placeholder="Email address or phone number" class="form-control" required>
+                    <label class="form-label" for="username">Email address</label>
+                </div>
+                <div class="form-outline mb-4">
+                    <input type="password" name="password" id="password" placeholder="Password" class="form-control" required>
+                    <label class="form-label" for="password">Password</label>
+                </div>
+                <button type="submit" class="btn-login">Log In</button>
+            </form>
+            <div class="forgot-password mt-4">
+                <a href="#" class="text-noir-500">Forgot Password?</a>
+            </div>
+            <div class="signup-link mt-6">
+                <span class="text-noir-500">Don't have an account?</span>
+                <a href="/signup" class="font-bold text-blue-500">Sign Up for SmartU</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

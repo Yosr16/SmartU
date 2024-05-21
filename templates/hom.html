@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="styles.css"> <!-- Link to external CSS file -->
+<title>Chat Room</title>
+</head>
+<style>
+  body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.btn:hover {
+  background-color: #45a049;
+}
+
+</style>
+<body>
+
+<div class="header">
+    <h1>Chat Room</h1>
+</div>
+
+<div class="container">
+    <form id="post-form" method="POST" action="{% url 'checkview' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="room_name">Room Name:</label>
+            <input type="text" id="room_name" name="room_name" placeholder="Enter room name" required>
+        </div>
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+        </div>
+        <button type="submit" class="btn">Enter Room</button>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,231 @@
+[00:57, 13/05/2024] Rawen: <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de l'entreprise</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .card img {
+            max-width: 500px; /* Réduire la largeur maximale de l'image */
+            height: auto;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+        .card-content {
+            padding: 20px;
+        }
+        .card-content h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .card-content p {
+            margin-bottom: 15px;
+        }
+        .card-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-top: 1px solid #eee;
+        }
+        .card-actions button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            color: #666;
+        }
+        .card-actions button i {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>{{ business.name }}</h1>
+        <img class="main-image" src="{{ business.image.url }}" alt="{{ business.name }}">
+        <p>{{ business.description }}</p>
+    </div>
+    
+    <div class="container">
+        <h2>les post de ce small business</h2>
+        {% for post in posts %}
+           <!-- HTML -->
+<div class="card">
+    <img src="{{ post.image.url }}" alt="{{ post.title }}">
+    <div class="card-content">
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.content }}</p>
+    </div>
+    <div class="card-actions">
+        <button class="like-btn" data-post-id="{{ post.id }}">
+            <i class="fas fa-heart"></i> J'aime <span class="like-count">{{ post.likes }}</span>
+        </button>
+        <button class="comment-btn" data-post-id="{{ post.id }}">
+            <i class="fas fa-comment"></i> Commentaire
+        </button>
+    </div>
+</div>
+
+        {% empty %}
+            <p class="empty-message">Aucune autre photo pour le moment.</p>
+        {% endfor %}
+    </div>
+</body>
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+    // Ajouter un événement de clic au bouton "J'aime" des commentaires
+    document.querySelectorAll('.like-comment-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const commentId = this.getAttribute('data-comment-id');
+            const likeCountSpan = this.querySelector('.like-comment-count');
+            // Simuler un appel Ajax au serveur pour enregistrer le "like" pour le commentaire
+            // Remplacez cette partie par votre propre logique pour envoyer une requête au serveur
+            // pour enregistrer le like pour le commentaire avec l'identifiant commentId
+            const currentLikes = parseInt(likeCountSpan.textContent);
+            likeCountSpan.textContent = currentLikes + 1;
+            // Mettre à jour l'icône du bouton "J'aime" pour indiquer que l'utilisateur a aimé le commentaire
+            this.classList.add('liked');
+            // Désactiver le bouton pour éviter les clics multiples
+            this.disabled = true;
+        });
+    });
+
+    // Ajouter un événement de clic au bouton "Commentaire"
+    document.querySelectorAll('.comment-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const postId = this.getAttribute('data-post-id');
+            // Ouvrir une zone de commentaire ou une fenêtre modale pour écrire un commentaire
+            // Vous pouvez utiliser JavaScript ou un framework JavaScript comme Bootstrap pour cela
+            alert("Ouvrir la zone de commentaire pour le post #" + postId);
+        });
+    });
+
+    // Ajouter un événement de clic au bouton "J'aime" des publications
+    document.querySelectorAll('.like-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const postId = this.getAttribute('data-post-id');
+            const likeCountSpan = this.querySelector('.like-count');
+            // Simuler un appel Ajax au serveur pour enregistrer le "like" pour la publication
+            // Remplacez cette partie par votre propre logique pour envoyer une requête au serveur
+            // pour enregistrer le like pour la publication avec l'identifiant postId
+            const currentLikes = parseInt(likeCountSpan.textContent);
+            likeCountSpan.textContent = currentLikes + 1;
+            // Mettre à jour l'icône du bouton "J'aime" pour indiquer que l'utilisateur a aimé la publication
+            this.classList.add('liked');
+            // Désactiver le bouton pour éviter les clics multiples
+            this.disabled = true;
+        });
+    });
+});
+
+</script>
+</html>
+[00:57, 13/05/2024] Rawen: business_detail.htm
+[00:58, 13/05/2024] Rawen: <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Small Business</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Style pour la mise en page */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .card button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Liste de small business -->
+        <div class="card">
+            <h3>Small Business 1</h3>
+            <p>Description du Small Business 1</p>
+            <button class="detail-btn" data-business-id="1">Détail</button>
+        </div>
+        <div class="card">
+            <h3>Small Business 2</h3>
+            <p>Description du Small Business 2</p>
+            <button class="detail-btn" data-business-id="2">Détail</button>
+        </div>
+        <!-- Ajoutez plus de small business ici si nécessaire -->
+
+        <!-- Contenu détaillé -->
+        <div id="detail-content" style="display: none;">
+            <h2 id="business-name"></h2>
+            <p id="business-description"></p>
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour afficher le contenu détaillé du small business
+        function showBusinessDetails(businessId, businessName, businessDescription) {
+            document.getElementById('business-name').innerText = businessName;
+            document.getElementById('business-description').innerText = businessDescription;
+            document.getElementById('detail-content').style.display = 'block';
+        }
+
+        // Écouteur d'événements pour les boutons "Détail"
+        document.querySelectorAll('.detail-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Récupérer les informations du small business
+                const businessId = button.getAttribute('data-business-id');
+                const businessName = button.parentNode.querySelector('h3').innerText;
+                const businessDescription = button.parentNode.querySelector('p').innerText;
+                // Afficher les détails du small business
+                showBusinessDetails(businessId, businessName, businessDescription);
+            });
+        });
+    </script>
+</body>
+</html>

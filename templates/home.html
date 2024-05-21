@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil -SmartU</title>
+    <meta name="description" content="Bienvenue sur Mon Site Éducatif. Explorez nos cours et développez vos compétences.">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+z5Gbl9WdF0Ajgc4Rg1e5+8a3V2RSJoq6l4tyPm" crossorigin="anonymous">
+    <style>
+        * {
+     margin: 0px;
+     padding: 0px;
+     box-sizing: border-box;
+     font-family: 'Poppins', sans-serif;
+     scroll-behavior: smooth;
+ }
+ 
+ p {
+     font-weight: 300;
+     color: #111;
+ }
+ 
+ .department-image {
+     height: 250px; /* Ajustez la hauteur des images des départements selon vos préférences */
+     object-fit: cover; /* Pour conserver les proportions de l'image */
+ }
+ 
+ header {
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     padding: 20px 10px;
+     z-index: 1000;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     transition: all 0.3s ease;
+     background: rgba(0, 0, 0, 0.3);
+ }
+ 
+ header.scrolled {
+     background: rgba(22, 21, 51, 0.9);
+     padding: 10px 10px;
+ }
+ 
+ .logo {
+     display: flex;
+     align-items: center;
+     color: #fff;
+     font-weight: bold;
+     font-size: 2em;
+     text-decoration: none;
+     transition: color 0.3s;
+ }
+ 
+ .logo span {
+     color: #ffcc00;
+ }
+ 
+ .logo img {
+     height: 70px; /* Ajuster la hauteur de l'image */
+     margin-right: 10px; /* Ajouter un espace entre l'image et le texte */
+ }
+ 
+ .navbar {
+     display: flex;
+     list-style: none;
+ }
+ 
+ .navbar li {
+     list-style: none;
+ }
+ 
+ .navbar a {
+     color: #fff;
+     text-decoration: none;
+     margin-left: 30px;
+     font-weight: 600;
+     transition: color 0.3s, border-bottom 0.3s;
+     padding-bottom: 5px;
+ }
+ 
+ .navbar a:hover {
+     color: #ffcc00;
+     border-bottom: 2px solid #ffcc00;
+ }
+ 
+ .btn-reserve {
+     padding: 10px 20px;
+     background: #ffcc00;
+     color: #161533;
+     text-transform: uppercase;
+     font-weight: 600;
+     border-radius: 5px;
+     text-decoration: none;
+     transition: background-color 0.3s ease, transform 0.3s ease;
+ }
+ 
+ .btn-reserve:hover {
+     background-color: #e6b800;
+     transform: translateY(-5px);
+ }
+ 
+ .banniere {
+     position: relative;
+     width: 100%;
+     min-height: 100vh;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     background-image: url('https://www.ddcfrance.com/wp-content/uploads/2020/03/DDC_Site_Complet.jpg');
+     background-size: cover;
+     background-position: center;
+     padding: 0 20px;
+ }
+ 
+ .banniere .overlay {
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background: rgba(0, 0, 0, 0.6); /* Overlay semi-transparent */
+     z-index: 1;
+ }
+ 
+ .banniere .contenu {
+     max-width: 70%;
+     text-align: center;
+     color: #fff;
+     z-index: 2;
+ }
+ 
+ .banniere .contenu h2 {
+     font-size: 3em;
+     text-transform: capitalize;
+     margin-bottom: 20px;
+     font-weight: 700;
+ }
+ 
+ .banniere .contenu p {
+     font-size: 1.2em;
+     line-height: 1.6;
+     margin-bottom: 30px;
+ }
+ 
+ .banniere .contenu .btn-reserve {
+     display: inline-block;
+     padding: 10px 30px;
+     background-color: #ffcc00;
+     color: #161533;
+     text-transform: uppercase;
+     font-weight: 600;
+     border-radius: 5px;
+     text-decoration: none;
+     transition: background-color 0.3s ease, transform 0.3s ease;
+ }
+ 
+ .banniere .contenu .btn-reserve:hover {
+     background-color: #e6b800;
+     transform: translateY(-5px);
+ }
+ 
+ @media (max-width: 768px) {
+     .banniere .contenu {
+         max-width: 90%;
+     }
+ 
+     .banniere .contenu h2 {
+         font-size: 2.5em;
+     }
+ 
+     .banniere .contenu p {
+         font-size: 1em;
+     }
+ }
+ 
+ .contenu p:nth-child(2) {
+     color: #fff;
+     font-size: 1.2em;
+ }
+ 
+ .btn1 {
+     font-size: 1em;
+     color: #fff;
+     background: #161533;
+     padding: 10px 20px;
+     display: inline-block;
+     margin-top: 20px;
+     text-decoration: none;
+     text-transform: uppercase;
+     letter-spacing: 2px;
+     transition: 0.5s;
+     margin-left: 10px;
+ }
+ 
+ .btn2 {
+     font-size: 1em;
+     color: #fff;
+     background: #2a4963;
+     padding: 10px 20px;
+     display: inline-block;
+     margin-top: 20px;
+     text-decoration: none;
+     text-transform: uppercase;
+     letter-spacing: 2px;
+     transition: 0.5s;
+     margin-left: 10px;
+ }
+ 
+ .btn1:hover {
+     letter-spacing: 4px;
+ }
+ 
+ section {
+     padding: 50px 0;
+ }
+ 
+ .row {
+     display: flex;
+     flex-wrap: wrap;
+     justify-content: space-between;
+     align-items: center;
+ }
+ 
+ .row .col50 {
+     flex: 0 0 48%;
+     max-width: 48%;
+     padding: 15px;
+ }
+ 
+ .row .col50.text-center {
+     text-align: center;
+ }
+ 
+ .titre-texte {
+     color: #fff;
+     font-size: 2.5em;
+     font-weight: 700;
+     margin-bottom: 20px;
+     text-transform: capitalize;
+ }
+ 
+ .titre-texte span {
+     color: #ffcc00;
+ }
+ 
+ .apropos p {
+     color: #fff;
+     font-size: 1.2em;
+     line-height: 1.6;
+ }
+ 
+ .map iframe {
+     border-radius: 10px;
+ }
+ 
+ .apropos {
+     background-size: cover;
+ }
+ 
+ @media (max-width: 768px) {
+     .row .col50 {
+         flex: 0 0 100%;
+         max-width: 100%;
+         padding: 10px;
+     }
+ 
+     .titre-texte {
+         font-size: 2em;
+     }
+ 
+     .apropos p {
+         font-size: 1em;
+     }
+ }
+ 
+ body {
+    background: linear-gradient(135deg, #07a0ffde 0%, #100255cb 100%);
+ }
+ .temoignage {
+    background-size: cover;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.titre {
+    margin-bottom: 40px;
+}
+
+.titre-texte {
+    color: #fff;
+    font-size: 2.5em;
+    font-weight: 700;
+    text-transform: capitalize;
+    margin-bottom: 10px;
+}
+
+.titre-texte span {
+    color: #ffcc00;
+}
+
+.titre p {
+    color: #fff;
+    font-size: 1.2em;
+}
+
+.temoignage .contenu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.temoignage .contenu .box {
+    width: 100%;
+    max-width: 340px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.temoignage .contenu .box:hover {
+    transform: translateY(-10px);
+}
+
+.temoignage .contenu .box .imbox {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.temoignage .contenu .box .imbox img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.temoignage .contenu .box .text {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.temoignage .contenu .box .text h3 {
+    color: #161533;
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .titre-texte {
+        font-size: 2em;
+    }
+
+    .titre p {
+        font-size: 1em;
+    }
+
+    .temoignage .contenu .box {
+        max-width: 90%;
+        padding: 20px;
+    }
+
+    .temoignage .contenu .box .imbox {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+ .menu {
+     margin-top: -50px;
+     padding: 50px 0;
+     background-size: cover;
+     color: #fff;
+ }
+ 
+ .menu h2 {
+     font-size: 2.5em;
+     font-weight: 700;
+     margin-bottom: 40px;
+     text-transform: uppercase;
+     color: #fff;
+ }
+ 
+ .card-department {
+     background: #fff;
+     border: none;
+     border-radius: 10px;
+     overflow: hidden;
+ }
+ 
+ .card-department img {
+     border-top-left-radius: 10px;
+     border-top-right-radius: 10px;
+     max-height: 250px;
+     object-fit: cover;
+ }
+ 
+ .card-department .card-body {
+     padding: 20px;
+     text-align: center;
+ }
+ 
+ .card-department .card-title {
+     font-size: 1.5em;
+     font-weight: 700;
+     margin-bottom: 10px;
+     color: #161533;
+ }
+ 
+ .card-department .card-text {
+     font-size: 1em;
+     color: #555;
+     margin-bottom: 20px;
+ }
+ 
+ .footer {
+     background: #161533;
+     padding: 40px 0;
+     color: #fff;
+     text-align: center;
+ }
+ 
+ .footer p {
+     margin-bottom: 10px;
+     font-size: 1em;
+     color: #bbb;
+ }
+ 
+ .footer a {
+     color: #ffcc00;
+     text-decoration: none;
+     transition: color 0.3s;
+ }
+ 
+ .footer a:hover {
+     color: #fff;
+ }
+ .contact {
+    padding: 50px 0;
+    text-align: center;
+}
+
+.titre-text span {
+    color: #000000;
+    font-size: 2em;
+}
+
+.contactform {
+    padding: 40px 30px;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+    border-radius: 10px;
+}
+
+.contactform .inputboite {
+    margin-bottom: 20px;
+}
+
+.contactform h3 {
+    color: #333;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.contactform .inputboite input,
+.contactform .inputboite textarea {
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 10px;
+    color: #333;
+    outline: none;
+    font-size: 1em;
+    border-radius: 5px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.contactform .inputboite textarea {
+    resize: vertical;
+    height: 100px;
+}
+.tem p{
+color: #ffef13;
+}
+.contactform .inputboite input[type="submit"] {
+    font-size: 1em;
+    font-weight: 700;
+    color: #fff;
+    background: #161533;
+    display: inline-block;
+    cursor: pointer;
+    text-transform: uppercase;
+    border: none;
+    transition: background 0.3s;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.contactform .inputboite input[type="submit"]:hover {
+    background: #333;
+}
+
+.contact-info {
+    text-align: left;
+    margin-top: 30px;
+}
+
+.contact-info h5 {
+    font-size: 1.2em;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.contact-info p {
+    font-size: 1em;
+    color: #232322;
+    margin: 5px 0;
+}
+
+.contact-info img {
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.contact-info a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.contact-info a:hover {
+    text-decoration: underline;
+}
+     </style>
+</head>
+<body>
+  
+    <header>
+        <div class="logo"><img src="https://th.bing.com/th/id/R.9aa3b18ac4d52f36ead91662bb883966?rik=z%2bpm16lOzgYU1w&riu=http%3a%2f%2fwww.isetsf.rnu.tn%2fuseruploads%2ffiles%2flogo_face_book.jpg&ehk=mvHtr4fn4IDRXM%2by9AkTJkau9JiQEsC4DzgvrOnrbZQ%3d&risl=&pid=ImgRaw&r=0" alt="ISET Sfax">Smart<span>U</span></div>
+    <div class="menuToggle" onclick="toggleMenu();"></div>
+    <ul class="navbar">
+        <li><a href="#banniere" onclick="toggleMenu();">Accueil</a></li>
+        <li><a href="#apropos" onclick="toggleMenu();">A propos</a></li>
+        <li><a href="#menu" onclick="toggleMenu();">Departement</a></li>
+        <li><a href="#temoignage" onclick="toggleMenu();">Temoignage</a></li>
+        <li><a href="#contact" onclick="toggleMenu();">Contact</a></li>
+        
+        </ul>
+</header>
+<section class="banniere" id="banniere">
+    <div class="overlay"></div>
+    <div class="contenu">
+        <h2>Bienvenue sur SmartU</h2>
+        <p>
+            Student Help est une application Web conçue
+             pour répondre aux besoins des étudiants universitaires
+            <br> dans leur vie sociale et académique.
+        </p>        <a href="{% url 'signin' %}" class="btn-reserve" onclick="openLoginPopup()">Connexion</a>
+    </div>
+</section>
+<section class="apropos" id="apropos">
+    <div class="container">
+        <div class="row">
+            <div class="col50 text-center">
+                <h2 class="titre-texte"><span>A</span> Propos De Nous</h2>
+                <p>
+                    Student Help est une application Web conçue
+                    <br> pour répondre aux besoins des étudiants universitaires
+                    <br> dans leur vie sociale et académique.
+                </p>
+            </div>
+            <div class="col50">
+                <div class="map">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3277.935773936705!2d10.769580075655695!3d34.757210672899575!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1301d2c1f3c2991f%3A0xab7f8817c80e9617!2sISET%20Sfax!5e0!3m2!1sfr!2stn!4v1710688300741!5m2!1sfr!2stn" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="menu" id="menu">
+    <div id="departments" class="container">
+        <div class="col-md-12 text-center">
+            <h2>Nos Départements</h2>
+            <div id="department-list" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="card-department card mb-4 shadow-sm">
+                            <img src="https://th.bing.com/th/id/R.898dfb8f0bbc8aa6743f3e52eda7b8b6?rik=JYQm0vl7RwUwgQ&pid=ImgRaw&r=0" class="card-img-top department-image" alt="Département de gestion">
+                            <div class="card-body">
+                                <h5 class="card-title">Département de Gestion</h5>
+                                <p class="card-text">Apprenez les principes de la gestion d'entreprise.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="card-department card mb-4 shadow-sm">
+                            <img src="https://th.bing.com/th/id/OIP.aybh77wHVFqiVDH8zCwmwQHaE7?rs=1&pid=ImgDetMain" class="card-img-top department-image" alt="Département de Génie des Procédés">
+                            <div class="card-body">
+                                <h5 class="card-title">Département de Génie des Procédés</h5>
+                                <p class="card-text">Explorez les processus de production et de transformation des matériaux.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Ajoutez d'autres départements ici -->
+                </div>
+                <a class="carousel-control-prev" href="#department-list" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#department-list" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+ <section class="temoignage" id="temoignage">
+    <div class="titre blanc">
+        <h2 class="titre-texte">Que Disent Nos <span>E</span>tudiants</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. </p>
+    </div>
+    <div class="contenu">
+        <div class="box">
+            <div class="imbox">
+                <img src="https://th.bing.com/th/id/R.7245faa003287d42227b7377edd660f1?rik=Tdhb8VUJoub4OA&pid=ImgRaw&r=0" alt="">
+            </div>
+            <div class="text">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod temporLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+                <h3>Franck leroi</h3>
+            </div>
+        </div>
+        <div class="box">
+            <div class="imbox">
+                <img src="https://th.bing.com/th/id/OIP.tjUOUBGnthmW762mbRAFdQHaE8?rs=1&pid=ImgDetMain" alt="">
+            </div>
+            <div class="text">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod temporLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+                <h3>Franck leroi</h3>
+            </div>
+        </div>
+        <div class="box">
+            <div class="imbox">
+                <img src="https://th.bing.com/th/id/OIP.vxYt02MuoQoETMeWB4c1vwHaHa?w=600&h=600&rs=1&pid=ImgDetMain" alt="">
+            </div>
+            <div class="text">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod temporLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+                <h3>Franck leroi</h3>
+            </div>
+        </div>
+    </div>
+ </section>
+ <section class="contact" id="contact">
+    <div class="titre noir">
+        <h2 class="titre-text"><span>C</span>ontact</h2>
+        <p>Pour plus d'informations, vous pouvez nous contacter.</p>
+    </div>
+    <div class="contactform">
+        <h3>Envoyer un message</h3>
+        <form id="contact-form">
+            {% csrf_token %}
+            <div class="inputboite">
+                <input type="text" name="name" placeholder="Nom" required>
+            </div>
+            <div class="inputboite">
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="inputboite">
+                <textarea name="message" placeholder="Message" required></textarea>
+            </div>
+            <div class="inputboite">
+                <input type="submit" value="Envoyer">
+            </div>
+        </form>
+        <div class="contact-info">
+            <h5 class="h5">Contact :</h5>
+            <p><img src="https://pngimg.com/uploads/phone/phone_PNG48972.png" alt="Téléphone" width="20" height="20"> Tél.: 74 431 425</p>
+            <p><img src="https://pngimg.com/uploads/phone/phone_PNG48972.png" alt="Fax" width="20" height="20"> Fax: 74 431 386</p>
+            <p><img src="https://th.bing.com/th/id/R.3ea5d09ed6d30dbf6f1f4871e5e4c788?rik=0iGQR9DRLKii1w&riu=http%3a%2f%2fpluspng.com%2fimg-png%2femail-icon-png-email-icon-2048.png&ehk=ahnNwHNab9Dq7qF3w%2fPChLDTTN3R5mvMWkD739gMXIg%3d&risl=&pid=ImgRaw&r=0" alt="Email" width="20" height="20"> Email: <a href="mailto:isetsf@isetsf.net">isetsf@isetsf.net</a></p>
+        </div>
+    </div>
+</section>
+ 
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+ <script>
+    // JavaScript pour activer le carrousel Bootstrap
+    $('.carousel').carousel();
+</script>
+
+ 
+</body>
+</html> 

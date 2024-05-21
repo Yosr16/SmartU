@@ -1,0 +1,202 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'assets/images/favicon.png' %}" rel="icon" type="image/png">
+    <title>Settings - Social Media Professional</title>
+    <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        /* Styles spécifiques à la page */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fafafa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+        }
+
+        .main-content {
+            width: 80%;
+            max-width: 800px;
+            padding: 40px;
+            background-color: #fff;
+            border: 1px solid #dbdbdb;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .uk-subnav-pill > li > a {
+            border-radius: 20px;
+            padding: 10px 20px;
+            color: #262626;
+            font-weight: 600;
+        }
+
+        .uk-subnav-pill > li > a:hover {
+            color: #0095f6;
+        }
+
+        .uk-switcher {
+            padding: 20px;
+            border-top: 1px solid #dbdbdb;
+            margin-top: 20px;
+        }
+
+        .uk-form-stacked label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .uk-button-primary {
+            background-color: #0095f6;
+            color: white;
+            border-radius: 4px;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease;
+            border: none;
+        }
+
+        .uk-button-primary:hover {
+            background-color: #007bb5;
+        }
+
+        .uk-button-danger {
+            background-color: #ff3b30;
+            color: white;
+            border-radius: 4px;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease;
+            border: none;
+        }
+
+        .uk-button-danger:hover {
+            background-color: #cc3225;
+        }
+
+        .uk-form-controls input,
+        .uk-form-controls textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #dbdbdb;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        .uk-form-controls input:focus,
+        .uk-form-controls textarea:focus {
+            outline: none;
+            border-color: #0095f6;
+        }
+
+        .uk-form-controls textarea {
+            resize: vertical;
+        }
+
+        .uk-margin {
+            margin-bottom: 20px;
+        }
+
+        .uk-flex-right {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .uk-flex-right .uk-button + .uk-button {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+   
+    <div class="main-content">
+        <h1 class="title">Account Settings for {{ user.username }}</h1>
+        <ul class="uk-subnav uk-subnav-pill uk-margin-medium-top" uk-switcher>
+            <li><a href="#">Edit Profile</a></li>
+            <li><a href="#">Change Password</a></li>
+            <li><a href="#">Favorise</a></li>
+            <li><a href="#">Followers</a></li>
+
+        </ul>
+        <ul class="uk-switcher uk-margin">
+            <li>
+                <form action="{% url 'profile' user.id %}" method="POST" enctype="multipart/form-data" class="uk-form-stacked">
+                    {% csrf_token %}
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="profile-image">Profile Image</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-input" id="profile-image" type="file" name="image" value="">
+                        </div>
+                    </div>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="bio">Bio</label>
+                        <textarea id="bio" name="bio" rows="3" class="uk-textarea">{{ user_profile.bio }}</textarea>
+                    </div>
+                 
+                    <!-- Plus de champs ici -->
+                    <div class="uk-margin uk-flex uk-flex-right">
+                        <button type="submit" class="uk-button uk-button-primary">Save Changes</button>
+                        <button type="button" class="uk-button uk-button-danger">Cancel</button>
+                    </div>
+                </form>
+            </li>
+            <li>
+                <label for="old-password">Old Password:</label>
+                <input type="password" id="old-password" name="old-password" class="uk-input uk-margin">
+                
+                <label for="new-password1">New Password:</label>
+                <input type="password" id="new-password1" name="new-password1" class="uk-input uk-margin">
+                
+                <label for="new-password2">Confirm Password:</label>
+                <input type="password" id="new-password2" name="new-password2" class="uk-input uk-margin">
+                
+                <div class="uk-margin uk-flex uk-flex-right">
+                    <button type="submit" class="uk-button uk-button-primary">Change Password</button>
+                    <button type="button" id="cancel-password-btn" class="uk-button uk-button-danger">Cancel</button>
+                </div>
+            </li>
+            
+            
+            
+            <li>
+                <!-- Section for "Favorise" -->
+                <p>Favorise content goes here.</p>
+            </li>
+            <li>
+                <ul>
+                    <li>{{ user_followers }} Followers</li>
+
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    
+    <!-- Scripts -->
+    <script src="{% static 'assets/js/uikit.js' %}"></script>
+    <script src="{% static 'assets/js/uikit-icons.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!-- notifications.html -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications </title>
+    <link rel="stylesheet" href="{% static 'css/main.min.css' %}">
+    
+</head>
+<style>
+    .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.dark-mode .navbar {
+    background-color: #1f1f1f;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+.navbar-brand {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333333;
+}
+
+.dark-mode .navbar-brand {
+    color: #e0e0e0;
+}
+
+.menu-icon {
+    display: none;
+}
+
+.header-menu {
+    display: flex;
+    align-items: center;
+}
+
+.header-menu.active {
+    display: block;
+}
+
+.nav-items {
+    display: flex;
+}
+
+.nav-item {
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.nav-item a {
+    color: #000;
+    text-decoration: none;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.nav-item a span {
+    margin-left: 0.5rem;
+    display: none;
+}
+
+.nav-item a:hover {
+    color: #007bff;
+}
+
+.nav-item:hover a span {
+    display: inline;
+}
+
+.nav-item a .fa {
+    font-size: 2.5rem; /* Modifier la taille des icônes de la barre de navigation */
+}
+
+.dark-mode .nav-item a .fa {
+    color: #e0e0e0;
+}
+
+.dark-mode-toggle {
+    margin-left: 1rem;
+}
+
+/* Styles pour les petits écrans */
+@media screen and (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    .menu-icon {
+        display: block;
+        cursor: pointer;
+    }
+
+    .header-menu {
+        display: none;
+    }
+
+    .header-menu.active {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #fff;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+    }
+
+    .header-menu.active .nav-items {
+        flex-direction: column;
+    }
+
+    .header-menu.active .nav-item {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+
+    .header-menu.active .nav-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .header-menu.active .dark-mode-toggle {
+        margin-left: 0;
+        margin-top: 1rem;
+    }
+    /* Ajoutez ce style à votre fichier CSS ou entre les balises <style> de votre page HTML */
+
+/* Ajoutez ce style à votre fichier CSS ou entre les balises <style> de votre page HTML */
+
+    .notification {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-icon {
+    font-size: 24px;
+    margin-right: 16px;
+    color: #007bff;
+}
+
+.notification-text {
+    flex: 1;
+    font-size: 16px;
+    color: #333333;
+}
+
+.notification-timestamp {
+    font-size: 12px;
+    color: #999999;
+}
+
+}
+
+</style>
+<script>
+    function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+}
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuTabs = document.querySelectorAll('.header-menu-tab');
+        menuTabs.forEach(tab => {
+            tab.addEventListener('click', function(event) {
+                event.preventDefault();
+                const targetId = this.getAttribute('data-target');
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    document.querySelectorAll('.block').forEach(block => {
+                        if (block.id !== targetId) {
+                            block.classList.add('hidden');
+                        }
+                    });
+                    targetElement.classList.remove('hidden');
+                }
+            });
+        });
+        const menuIcon = document.querySelector('.menu-icon');
+        const headerMenu = document.querySelector('.header-menu');
+        menuIcon.addEventListener('click', function() {
+            headerMenu.classList.toggle('active');
+        });
+    });
+    </script>
+<body>
+    <header class="navbar">
+        <div class="navbar-brand">SmartU</div>
+        <div class="menu-icon">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div class="header-menu">
+            <div class="nav-items">
+                <div class="nav-item">
+                    <a href="{% url 'index' %}">
+                        <i class="fa fa-home fa-lg"></i>
+                        <span>Home</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="{% url 'upload_transport_post' %}">
+                        <i class="fa fa-car fa-lg"></i>
+                        <span>Transport</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="{% url 'upload_logement_post' %}">
+                        <i class="fa fa-bed fa-lg"></i>
+                        <span>Logement</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="{% url 'upload_stage_post' %}">
+                        <i class="fa fa-briefcase fa-lg"></i>
+                        <span>Stage</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="{% url 'create-post' %}">
+                        <i class="fa fa-plus-circle fa-lg"></i>
+                        <span>Create Post</span>
+                    </a>
+                </div>
+            </div>
+            <button onclick="toggleDarkMode()">
+                <i class="fa fa-moon"></i>
+            </button>
+        </div>
+    </div>
+</header>
+{% for notification in notifications %}
+<div class="notification">
+    <div class="notification-content">
+        {% if notification.type == 'like' %}
+            <i class="fas fa-heart notification-icon"></i>
+        {% elif notification.type == 'comment' %}
+            <i class="fas fa-comment notification-icon"></i>
+        {% endif %}
+        <div class="notification-text">
+            <p>{{ notification.message }}</p>
+        </div>
+    </div>
+    <div class="notification-timestamp">
+        <small>{{ notification.timestamp }}</small>
+    </div>
+</div>
+{% empty %}
+<p>No notifications</p>
+{% endfor %}
+
+</body>
+</html>
